@@ -70,7 +70,9 @@ int main(int argc, char* argv[]) {
 
     connection.sin_family       = AF_INET;
     connection.sin_addr.s_addr  = ip->daddr;
+    printf("ip->tot_len: %d\n", ip->tot_len);
     sendto(sockfd, packet, ip->tot_len, 0, (struct sockaddr *)&connection, sizeof(struct sockaddr));
+    perror("sendto");
     printf("Sent %d byte packet to %s\n", ip->tot_len, dst_addr);
 
     addrlen = sizeof(connection);

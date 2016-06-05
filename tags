@@ -4,8 +4,10 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-BuildPacket	Pong.c	/^void *BuildPacket(char *dst, void *packet) {$/;"	f
-GetIPAddress	Pong.c	/^char *GetIPAddress(char *name) {$/;"	f
+BUF_SIZE	Pong.c	27;"	d	file:
+BuildPacket	Pong.c	/^void *BuildPacket(char *dst, struct iphdr **packet, int packetNum) {$/;"	f
+DNSLookup	Pong.c	/^char *DNSLookup(char *name) {$/;"	f
+EstablishConnection	Pong.c	/^int EstablishConnection(char *dst, int *sockFD, struct sockaddr_in **sockAddr) {$/;"	f
 GetIPAddress	tests/stk/Test.c	/^char *GetIPAddress(char *name) {$/;"	f
 ICMP_ADDRESS	ref/icmpstruct.c	58;"	d	file:
 ICMP_ADDRESSREPLY	ref/icmpstruct.c	59;"	d	file:
@@ -187,8 +189,11 @@ MAXTTL	ref/ipstruct.c	293;"	d	file:
 MAX_IPOPTLEN	ref/ipstruct.c	274;"	d	file:
 NR_ICMP_TYPES	ref/icmpstruct.c	60;"	d	file:
 NR_ICMP_UNREACH	ref/icmpstruct.c	80;"	d	file:
-PARRVAR	Pong.c	16;"	d	file:
-PVAR	Pong.c	15;"	d	file:
+PARRVAR	Pong.c	30;"	d	file:
+PVAR	Pong.c	29;"	d	file:
+ReadPacket	Pong.c	/^void ReadPacket(int sockFD, char *destIP, struct sockaddr_in sockAddr,$/;"	f
+SendPacket	Pong.c	/^int SendPacket(int sockFD, struct sockaddr_in sockAddress, void *packet, $/;"	f
+_S	Pong.c	26;"	d	file:
 __NETINET_IP_H	ref/ipstruct.c	19;"	d	file:
 __NETINET_IP_ICMP_H	ref/icmpstruct.c	19;"	d	file:
 __glibc_reserved	ref/icmpstruct.c	/^      u_int16_t	__glibc_reserved;$/;"	m	struct:icmphdr::__anon1::__anon3	file:
@@ -198,6 +203,8 @@ code	ref/icmpstruct.c	/^  u_int8_t code;		\/* type sub-code *\/$/;"	m	struct:icm
 daddr	ref/ipstruct.c	/^    u_int32_t daddr;$/;"	m	struct:iphdr	file:
 data	ref/ipstruct.c	/^    u_int32_t data[9];$/;"	m	struct:ip_timestamp	file:
 data	ref/ipstruct.c	/^    u_int32_t data[9];$/;"	m	struct:timestamp	file:
+debug	Pong.c	18;"	d	file:
+debug	Pong.c	20;"	d	file:
 echo	ref/icmpstruct.c	/^    } echo;			\/* echo datagram *\/$/;"	m	union:icmphdr::__anon1	typeref:struct:icmphdr::__anon1::__anon2	file:
 flags	ref/ipstruct.c	/^    unsigned int flags:4;$/;"	m	struct:timestamp	file:
 frag	ref/icmpstruct.c	/^    } frag;			\/* path mtu discovery *\/$/;"	m	union:icmphdr::__anon1	typeref:struct:icmphdr::__anon1::__anon3	file:
@@ -283,6 +290,9 @@ main	tests/TimerExample.c	/^int main(int argc, char *argv[]) {$/;"	f
 main	tests/stk/Test.c	/^int main(int argc, char* argv[]) {$/;"	f
 mtu	ref/icmpstruct.c	/^      u_int16_t	mtu;$/;"	m	struct:icmphdr::__anon1::__anon3	file:
 overflow	ref/ipstruct.c	/^    unsigned int overflow:4;$/;"	m	struct:timestamp	file:
+perrif	Pong.c	23;"	d	file:
+pexit	Pong.c	24;"	d	file:
+pexitif	Pong.c	25;"	d	file:
 protocol	ref/ipstruct.c	/^    u_int8_t protocol;$/;"	m	struct:iphdr	file:
 ptr	ref/ipstruct.c	/^    u_int8_t ptr;$/;"	m	struct:timestamp	file:
 saddr	ref/ipstruct.c	/^    u_int32_t saddr;$/;"	m	struct:iphdr	file:
