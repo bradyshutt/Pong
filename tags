@@ -4,7 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-BUF_SIZE	Pong.c	27;"	d	file:
+BUF_SIZE	Pong.c	42;"	d	file:
 BuildPacket	Pong.c	/^void *BuildPacket(char *dst, struct iphdr **packet, int packetNum) {$/;"	f
 DNSLookup	Pong.c	/^char *DNSLookup(char *name) {$/;"	f
 GetIPAddress	tests/stk/Test.c	/^char *GetIPAddress(char *name) {$/;"	f
@@ -189,9 +189,9 @@ MAX_IPOPTLEN	ref/ipstruct.c	274;"	d	file:
 NR_ICMP_TYPES	ref/icmpstruct.c	60;"	d	file:
 NR_ICMP_UNREACH	ref/icmpstruct.c	80;"	d	file:
 PACKETSIZE	tests/werk/test.c	37;"	d	file:
-PARRVAR	Pong.c	30;"	d	file:
-PVAR	Pong.c	29;"	d	file:
-PingHost	Pong.c	/^void PingHost(char *dst, int interval) {$/;"	f
+PARRVAR	Pong.c	45;"	d	file:
+PVAR	Pong.c	44;"	d	file:
+PingHost	Pong.c	/^void PingHost(char *dst, int interval, int *sockFD) {$/;"	f
 ReadPacket	Pong.c	/^void ReadPacket(int sockFD) {$/;"	f
 __NETINET_IP_H	ref/ipstruct.c	19;"	d	file:
 __NETINET_IP_ICMP_H	ref/icmpstruct.c	19;"	d	file:
@@ -203,8 +203,8 @@ code	ref/icmpstruct.c	/^  u_int8_t code;		\/* type sub-code *\/$/;"	m	struct:icm
 daddr	ref/ipstruct.c	/^    u_int32_t daddr;$/;"	m	struct:iphdr	file:
 data	ref/ipstruct.c	/^    u_int32_t data[9];$/;"	m	struct:ip_timestamp	file:
 data	ref/ipstruct.c	/^    u_int32_t data[9];$/;"	m	struct:timestamp	file:
-debug	Pong.c	19;"	d	file:
-debug	Pong.c	21;"	d	file:
+debug	Pong.c	34;"	d	file:
+debug	Pong.c	36;"	d	file:
 display	tests/werk/test.c	/^void display(void *buf, int bytes)$/;"	f
 echo	ref/icmpstruct.c	/^    } echo;			\/* echo datagram *\/$/;"	m	union:icmphdr::__anon1	typeref:struct:icmphdr::__anon1::__anon2	file:
 flags	ref/ipstruct.c	/^    unsigned int flags:4;$/;"	m	struct:timestamp	file:
@@ -296,8 +296,8 @@ msg	tests/werk/test.c	/^   char msg[PACKETSIZE-sizeof(struct icmphdr)];$/;"	m	st
 mtu	ref/icmpstruct.c	/^      u_int16_t	mtu;$/;"	m	struct:icmphdr::__anon1::__anon3	file:
 overflow	ref/ipstruct.c	/^    unsigned int overflow:4;$/;"	m	struct:timestamp	file:
 packet	tests/werk/test.c	/^struct packet$/;"	s	file:
-perrif	Pong.c	24;"	d	file:
-pexit	Pong.c	25;"	d	file:
+perrif	Pong.c	39;"	d	file:
+pexit	Pong.c	40;"	d	file:
 pid	tests/werk/test.c	/^int pid=-1;$/;"	v
 ping	tests/werk/test.c	/^void ping(struct sockaddr_in *addr)$/;"	f
 proto	tests/werk/test.c	/^struct protoent *proto=NULL;$/;"	v	typeref:struct:protoent

@@ -1,19 +1,34 @@
 /* PONG - Ping utility implemented in the C programming language   */
 
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <string.h>
+//#include <sys/time.h>
+//#include <sys/socket.h>
+//#include <sys/types.h>
+//#include <linux/icmp.h>
+//#include <linux/ip.h>
+//#include <time.h>
+//#include <unistd.h>
+//#include <netdb.h>         /* hostent */
+////#include <netinet/in.h>
+////#include <netinet/ip_icmp.h>
+//#include <arpa/inet.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <linux/icmp.h>
-#include <linux/ip.h>
-#include <time.h>
-#include <unistd.h>
 #include <netdb.h>         /* hostent */
-//#include <netinet/in.h>
-//#include <netinet/ip_icmp.h>
+#include <netinet/ip.h>
+#include <netinet/ip_icmp.h>
+//#include <linux/ip.h>
+//#include <linux/icmp.h>
 #include <arpa/inet.h>
+#include <sys/socket.h>
+#include <time.h>
+#include <sys/time.h>
+#include <unistd.h>
+
 
 #ifdef DEBUG
 #define debug printf
@@ -123,8 +138,12 @@ char *DNSLookup(char *name) {
 //
 //   return 1;
 //}
+//
 
-void ReadPacket(int sockFD) {
+
+//sockFd, destIp, sockaddr_in sockAddr, 
+
+void ReadPacket(int sockFD, char *dst) {
 
    struct iphdr *replyPacket;
    struct icmphdr *replyIcmpHeader;
@@ -132,13 +151,16 @@ void ReadPacket(int sockFD) {
    int addrLen, bufSize;
    char *buf;//, *packetSrcAddr;
 
+   recSock.sin_family = AF_INET;
+   recSock.sin_addr.s_addr = inet_addr(dst);
+
    addrLen = sizeof(recSock);
    bufSize = sizeof(struct iphdr) + sizeof(struct icmphdr);
-   buf = malloc(bufSize);
+   buf = calloc(1, bufSize);
    debug("Address Length: %d", addrLen);
-   debug("Read Packet SockFD: %d", sockFD);
 
-   fprintf(stderr, "hi\n");
+   //fprintf(stderr, "Reading from socked: %d\n", sockFD);
+   printf("Reading a packet into a %d byte butter through sockedFD %d\n", bufSize ,  sockFD);
    //if ((sockFD = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == -1 )
    //   perror("Read create socket");
 
@@ -238,6 +260,8 @@ void PingHost(char *dst, int interval, int *sockFD) {
    debug("packet num: %d\n", icmpHdr->un.echo.sequence);
    debug("ipPacket->totLen : %d\n", ipHdr->tot_len);
 
+   printf("Sending a %d byte packet to %s, through sockedFD %d\n", ipHdr->tot_len ,dst, *sockFD);
+
    if (sendto(*sockFD, pkt, ipHdr->tot_len, 0, (struct sockaddr*) &sockAddr, 
     (socklen_t) sizeof(struct sockaddr_in)));
     perror("sendto");
@@ -277,7 +301,7 @@ int main(int argc, char *argv[]) {
   // }
    //else {
       PingHost(dstIP, interval, &sockFD);
-      ReadPacket(sockFD);
+      ReadPacket(sockFD, dstIP);
 
    //}
 
