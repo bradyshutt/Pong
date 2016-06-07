@@ -7,7 +7,6 @@
 BUF_SIZE	Pong.c	27;"	d	file:
 BuildPacket	Pong.c	/^void *BuildPacket(char *dst, struct iphdr **packet, int packetNum) {$/;"	f
 DNSLookup	Pong.c	/^char *DNSLookup(char *name) {$/;"	f
-EstablishConnection	Pong.c	/^int EstablishConnection(char *dst, int *sockFD, struct sockaddr_in **sockAddr) {$/;"	f
 GetIPAddress	tests/stk/Test.c	/^char *GetIPAddress(char *name) {$/;"	f
 ICMP_ADDRESS	ref/icmpstruct.c	58;"	d	file:
 ICMP_ADDRESSREPLY	ref/icmpstruct.c	59;"	d	file:
@@ -189,27 +188,30 @@ MAXTTL	ref/ipstruct.c	293;"	d	file:
 MAX_IPOPTLEN	ref/ipstruct.c	274;"	d	file:
 NR_ICMP_TYPES	ref/icmpstruct.c	60;"	d	file:
 NR_ICMP_UNREACH	ref/icmpstruct.c	80;"	d	file:
+PACKETSIZE	tests/werk/test.c	37;"	d	file:
 PARRVAR	Pong.c	30;"	d	file:
 PVAR	Pong.c	29;"	d	file:
-ReadPacket	Pong.c	/^void ReadPacket(int sockFD, char *destIP, struct sockaddr_in sockAddr,$/;"	f
-SendPacket	Pong.c	/^int SendPacket(int sockFD, struct sockaddr_in sockAddress, void *packet, $/;"	f
-_S	Pong.c	26;"	d	file:
+PingHost	Pong.c	/^void PingHost(char *dst, int interval) {$/;"	f
+ReadPacket	Pong.c	/^void ReadPacket(int sockFD) {$/;"	f
 __NETINET_IP_H	ref/ipstruct.c	19;"	d	file:
 __NETINET_IP_ICMP_H	ref/icmpstruct.c	19;"	d	file:
 __glibc_reserved	ref/icmpstruct.c	/^      u_int16_t	__glibc_reserved;$/;"	m	struct:icmphdr::__anon1::__anon3	file:
 check	ref/ipstruct.c	/^    u_int16_t check;$/;"	m	struct:iphdr	file:
 checksum	ref/icmpstruct.c	/^  u_int16_t checksum;$/;"	m	struct:icmphdr	file:
+checksum	tests/werk/test.c	/^unsigned short checksum(void *b, int len)$/;"	f
 code	ref/icmpstruct.c	/^  u_int8_t code;		\/* type sub-code *\/$/;"	m	struct:icmphdr	file:
 daddr	ref/ipstruct.c	/^    u_int32_t daddr;$/;"	m	struct:iphdr	file:
 data	ref/ipstruct.c	/^    u_int32_t data[9];$/;"	m	struct:ip_timestamp	file:
 data	ref/ipstruct.c	/^    u_int32_t data[9];$/;"	m	struct:timestamp	file:
-debug	Pong.c	18;"	d	file:
-debug	Pong.c	20;"	d	file:
+debug	Pong.c	19;"	d	file:
+debug	Pong.c	21;"	d	file:
+display	tests/werk/test.c	/^void display(void *buf, int bytes)$/;"	f
 echo	ref/icmpstruct.c	/^    } echo;			\/* echo datagram *\/$/;"	m	union:icmphdr::__anon1	typeref:struct:icmphdr::__anon1::__anon2	file:
 flags	ref/ipstruct.c	/^    unsigned int flags:4;$/;"	m	struct:timestamp	file:
 frag	ref/icmpstruct.c	/^    } frag;			\/* path mtu discovery *\/$/;"	m	union:icmphdr::__anon1	typeref:struct:icmphdr::__anon1::__anon3	file:
 frag_off	ref/ipstruct.c	/^    u_int16_t frag_off;$/;"	m	struct:iphdr	file:
 gateway	ref/icmpstruct.c	/^    u_int32_t	gateway;	\/* gateway address *\/$/;"	m	union:icmphdr::__anon1	file:
+hdr	tests/werk/test.c	/^   struct icmphdr hdr;$/;"	m	struct:packet	typeref:struct:packet::icmphdr	file:
 icd_id	ref/icmpstruct.c	/^      u_int16_t icd_id;$/;"	m	struct:icmp::__anon4::ih_idseq	file:
 icd_seq	ref/icmpstruct.c	/^      u_int16_t icd_seq;$/;"	m	struct:icmp::__anon4::ih_idseq	file:
 icmp	ref/icmpstruct.c	/^struct icmp$/;"	s	file:
@@ -285,14 +287,20 @@ its_otime	ref/icmpstruct.c	/^      u_int32_t its_otime;$/;"	m	struct:icmp::__ano
 its_rtime	ref/icmpstruct.c	/^      u_int32_t its_rtime;$/;"	m	struct:icmp::__anon5::__anon6	file:
 its_ttime	ref/icmpstruct.c	/^      u_int32_t its_ttime;$/;"	m	struct:icmp::__anon5::__anon6	file:
 len	ref/ipstruct.c	/^    u_int8_t len;$/;"	m	struct:timestamp	file:
+listener	tests/werk/test.c	/^void listener(void)$/;"	f
 main	Pong.c	/^int main(int argc, char *argv[]) {$/;"	f
 main	tests/TimerExample.c	/^int main(int argc, char *argv[]) {$/;"	f
 main	tests/stk/Test.c	/^int main(int argc, char* argv[]) {$/;"	f
+main	tests/werk/test.c	/^int main(int count, char *strings[])$/;"	f
+msg	tests/werk/test.c	/^   char msg[PACKETSIZE-sizeof(struct icmphdr)];$/;"	m	struct:packet	file:
 mtu	ref/icmpstruct.c	/^      u_int16_t	mtu;$/;"	m	struct:icmphdr::__anon1::__anon3	file:
 overflow	ref/ipstruct.c	/^    unsigned int overflow:4;$/;"	m	struct:timestamp	file:
-perrif	Pong.c	23;"	d	file:
-pexit	Pong.c	24;"	d	file:
-pexitif	Pong.c	25;"	d	file:
+packet	tests/werk/test.c	/^struct packet$/;"	s	file:
+perrif	Pong.c	24;"	d	file:
+pexit	Pong.c	25;"	d	file:
+pid	tests/werk/test.c	/^int pid=-1;$/;"	v
+ping	tests/werk/test.c	/^void ping(struct sockaddr_in *addr)$/;"	f
+proto	tests/werk/test.c	/^struct protoent *proto=NULL;$/;"	v	typeref:struct:protoent
 protocol	ref/ipstruct.c	/^    u_int8_t protocol;$/;"	m	struct:iphdr	file:
 ptr	ref/ipstruct.c	/^    u_int8_t ptr;$/;"	m	struct:timestamp	file:
 saddr	ref/ipstruct.c	/^    u_int32_t saddr;$/;"	m	struct:iphdr	file:

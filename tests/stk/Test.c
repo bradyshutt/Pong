@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     char *dst_addr;
     char *src_addr="192.168.1.222";
     char *packet, *buffer;
-    int sockfd, optval, addrlen;
+    int sockfd, optval, addrlen, pid;
 
     dst_addr = GetIPAddress("www.google.com");
     printf("dst_addr: %s\n", dst_addr);
@@ -57,6 +57,8 @@ int main(int argc, char* argv[]) {
     //ip->check = in_cksum((unsigned short *)ip, sizeof(struct iphdr)); 
 
     icmp->type      = ICMP_ECHO;
+    icmp->un.echo.id = htons(pid = getpid());
+    printf("pid: %d\n", pid);
     //icmp->checksum = in_cksum((unsigned short *)icmp, sizeof(struct icmphdr));
 
     /* open ICMP socket */
@@ -98,7 +100,8 @@ int main(int argc, char* argv[]) {
         ip_reply = (struct iphdr*) buffer;
         cp = (char *)&ip_reply->saddr;
         printf("Received %d byte reply from %u.%u.%u.%u:\n", ntohs(ip_reply->tot_len), cp[0]&0xff,cp[1]&0xff,cp[2]&0xff,cp[3]&0xff);
-        printf("ID: %d\n", ntohs(ip_reply->id));
+        printf("ICMP ID: %d\n", htons(icmp->un.echo.id));
+        printf("IP ID: %d\n", ntohs(ip_reply->id));
         printf("TTL: %d\n", ip_reply->ttl);
         }
 

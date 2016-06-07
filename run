@@ -3,6 +3,8 @@
 
 make
 
+sudo ./Pong www.google.com
+
 
 
 
