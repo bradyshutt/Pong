@@ -192,7 +192,9 @@ PACKETSIZE	tests/werk/test.c	37;"	d	file:
 PARRVAR	Pong.c	45;"	d	file:
 PVAR	Pong.c	44;"	d	file:
 PingHost	Pong.c	/^void PingHost(char *dst, int interval, int *sockFD) {$/;"	f
-ReadPacket	Pong.c	/^void ReadPacket(int sockFD) {$/;"	f
+PrintPacket	Pong.c	/^void PrintPacket(char *pkt, int pktSize, int showVals) {$/;"	f
+PrintPacket	tests/werk/test.c	/^void PrintPacket(char *pkt, int pktSize, int showVals) {$/;"	f
+ReadPacket	Pong.c	/^void ReadPacket(int sockFD, char *dst) {$/;"	f
 __NETINET_IP_H	ref/ipstruct.c	19;"	d	file:
 __NETINET_IP_ICMP_H	ref/icmpstruct.c	19;"	d	file:
 __glibc_reserved	ref/icmpstruct.c	/^      u_int16_t	__glibc_reserved;$/;"	m	struct:icmphdr::__anon1::__anon3	file:

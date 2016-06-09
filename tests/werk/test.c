@@ -62,6 +62,46 @@ unsigned short checksum(void *b, int len)
    return result;
 }
 
+void PrintPacket(char *pkt, int pktSize, int showVals) {
+   int idx;
+   struct iphdr *ip;
+   struct icmphdr *icmp;
+   struct in_addr src, dst;
+
+   printf("-------------\n" );
+   if (showVals) {
+      ip = (struct iphdr *) pkt;
+      icmp = (struct icmphdr * ) (ip + sizeof(struct iphdr));
+      printf("Packet with ID %hd, and ICMP.ID %hd\n", ip->id, icmp->un.echo.id);
+      printf("\tihl : %d\n\ttot_len :  %d\n", ip->ihl, ip->tot_len);
+      src.s_addr = ip->saddr;
+      dst.s_addr = ip->daddr;
+      printf("\tsaddr : %s\n", inet_ntoa(src));
+      printf("\tdaddr : %s\n", inet_ntoa(dst));
+
+   }
+   else {
+
+      for (idx = 0; idx < pktSize; idx++)
+         printf("%c ", pkt[idx]);
+      printf("\n");
+   }
+   printf("===========\n" );
+
+   /* 
+   ipHdr->ihl = 5;
+   ipHdr->version = 4;
+   ipHdr->tot_len = pktSize;
+   ipHdr->protocol = IPPROTO_ICMP;
+   ipHdr->saddr = inet_addr(srcIPAddress);
+   ipHdr->daddr = inet_addr(dst);
+   icmpHdr->type = ICMP_ECHO;
+   icmpHdr->un.echo.sequence = htons(pktNum++);
+   icmpHdr->un.echo.id = htons(pid = getpid());
+   */
+
+}
+
 /*--------------------------------------------------------------------*/
 /*--- display - present echo info                                  ---*/
 /*--------------------------------------------------------------------*/

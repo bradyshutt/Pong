@@ -19,10 +19,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <netdb.h>         /* hostent */
-#include <netinet/ip.h>
-#include <netinet/ip_icmp.h>
-//#include <linux/ip.h>
-//#include <linux/icmp.h>
+//#include <netinet/ip.h>
+//#include <netinet/ip_icmp.h>
+#include <linux/ip.h>
+#include <linux/icmp.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <time.h>
@@ -55,7 +55,7 @@ void *BuildPacket(char *dst, struct iphdr **packet, int packetNum) {
    *packet = calloc(1, pktSize);
 
    //ipHeader = (struct iphdr *) packet; 
-   icmpHeader = (struct icmphdr *) (*packet + sizeof(struct icmphdr));
+   icmpHeader = (struct icmphdr *) (*packet + sizeof(struct iphdr));
 
    (*packet)->ihl = 5;
    (*packet)->version = 4;
@@ -100,150 +100,58 @@ char *DNSLookup(char *name) {
    return rtn;
 }
 
-//int EstablishConnection(char *dst, int *sockFD, struct sockaddr_in **sockAddr) {
-//   int sock, sockOpt;
-//
-//   if ((sock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == -1 )
-//      perror("socket");
-//
-//   /* Set IP_HDRINCL flag on socket to use MY IP header, 
-//    * rather than the kernals default IP header */
-//   setsockopt(sock, IPPROTO_IP, IP_HDRINCL, &sockOpt, sizeof(int));
-//
-//   *sockAddr = calloc(1, sizeof(struct sockaddr_in));
-//   (*sockAddr)->sin_family = AF_INET;
-//   (*sockAddr)->sin_addr.s_addr = inet_addr(dst);
-//
-//   debug("socket fd: %d\n", sock);
-//   *sockFD = sock;
-//
-//   return 1;
-//}
+/* 
+int EstablishConnection(char *dst, int *sockFD, struct sockaddr_in **sockAddr) {
+   int sock, sockOpt;
 
-//int SendPacket(int sockFD, struct sockaddr_in sockAddress, struct iphdr *packet, char *dst) {
-//
-//   //struct iphdr *ipPacket;
-//
-//   //ipPacket = (struct iphdr *) packet;
-//
-//   debug("ipPacket->totLen : %d\n", packet->tot_len);
-//
-//   if (sendto(sockFD, packet, packet->tot_len, 0, 
-//    (struct sockaddr *) &sockAddress, sizeof(struct sockaddr)) == -1)
-//      perror("sendto");
-//
-//   //gettimeofday(sendTime, NULL);
-//
-//   debug("Sent %d byte packet to %s\n", packet->tot_len, dst);
-//
-//   return 1;
-//}
-//
+   if ((sock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == -1 )
+      perror("socket");
 
+   // Set IP_HDRINCL flag on socket to use MY IP header, 
+    * rather than the kernals default IP header //
+   setsockopt(sock, IPPROTO_IP, IP_HDRINCL, &sockOpt, sizeof(int));
 
-//sockFd, destIp, sockaddr_in sockAddr, 
+   *sockAddr = calloc(1, sizeof(struct sockaddr_in));
+   (*sockAddr)->sin_family = AF_INET;
+   (*sockAddr)->sin_addr.s_addr = inet_addr(dst);
 
-void ReadPacket(int sockFD, char *dst) {
+   debug("socket fd: %d\n", sock);
+   *sockFD = sock;
 
-   struct iphdr *replyPacket;
-   struct icmphdr *replyIcmpHeader;
-   struct sockaddr_in recSock;
-   int addrLen, bufSize;
-   char *buf;//, *packetSrcAddr;
-
-   recSock.sin_family = AF_INET;
-   recSock.sin_addr.s_addr = inet_addr(dst);
-
-   addrLen = sizeof(recSock);
-   bufSize = sizeof(struct iphdr) + sizeof(struct icmphdr);
-   buf = calloc(1, bufSize);
-   debug("Address Length: %d", addrLen);
-
-   //fprintf(stderr, "Reading from socked: %d\n", sockFD);
-   printf("Reading a packet into a %d byte butter through sockedFD %d\n", bufSize ,  sockFD);
-   //if ((sockFD = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == -1 )
-   //   perror("Read create socket");
-
-   recvfrom(sockFD, buf, bufSize, 0, (struct sockaddr *) &recSock, 
-    (socklen_t *) &addrLen);
-   perror("recvfrom");
-
-   fprintf(stderr, "done\n" );
-//socklen_t *addrlen
-   //gettimeofday(recTime, NULL);
-
-   debug("REC VARS:\n\
-      sockfd: %d\n\
-      s/o(buffer): %ld\n\
-      buffer: %s\n\
-      3rd size: %ld\n\
-      addrlen: %d\n\
-      \tID: %d\n",
-      sockFD, sizeof(buf), buf, sizeof(struct iphdr) + sizeof(struct icmphdr),
-      addrLen, ntohs(((struct icmphdr *) (buf + sizeof(struct icmphdr)))->un.echo.id));
-
-   replyPacket = (struct iphdr *) buf;
-//jjk   printf("internal pnum: %d\n", 
-//jjk    (
-//jjk     (struct icmphdr *) (replyPacket + sizeof(struct icmphdr))
-//jjk    )->un.echo.sequence
-//jjk   );
-//jjk   //replyIcmpHeader = (struct icmphdr *) (*packet + sizeof(struct icmphdr));
-   replyIcmpHeader = (struct icmphdr *) (replyPacket + sizeof(struct icmphdr));
-//jjk   printf("replyIcmpHeader seq: %d\n", replyIcmpHeader->un.echo.sequence);
-   //packetSrcAddr = (char *)&replyPacket->saddr;
- /*  printf("Received %d bytes from %u.%u.%u.%u:\n", 
-    ntohs(replyPacket->tot_len), 
-    packetSrcAddr[0] & 0xff, 
-    packetSrcAddr[1] & 0xff, 
-    packetSrcAddr[2] & 0xff,
-    packetSrcAddr[3] & 0xff);
- */
-   //timersub(recTime, sendTime, &timeDiff);
-   if (replyIcmpHeader);
-      
-//   struct in_addr srcAddr, dstAddr;
-//   srcAddr.s_addr = replyPacket->saddr;
-//   dstAddr.s_addr = replyPacket->daddr;
-//
-//   printf("%d bytes from %s (%s): icmp_seq=%d ttl=%d time=%2.1lf ms\n", 
-//         ntohs(replyPacket->tot_len),
-//         inet_ntoa(srcAddr),
-//         inet_ntoa(dstAddr),
-//         //char *inet_ntoa(struct in_addr in);
-//         replyIcmpHeader->un.echo.sequence, 
-//         replyPacket->ttl, 
-//         (double) timeDiff.tv_usec / 100);
-
-   //printf("Took %2.1lf\n", (double) timeDiff->tv_usec / 100 ); 
-   //printf("Took %ld.%.6ld\n", (long int) timeDiff.tv_sec, (long int) timeDiff.tv_usec); 
-   //printf("TTL: %d\n", ip_reply->ttl);
-
+   return 1;
 }
+*/
 
-void PingHost(char *dst, int interval, int *sockFD) {
-   int sockOpt, pktSize, pktNum = 1, pid;
-   char *pkt, *srcIPAddress = "192.168.1.222";
-   struct sockaddr_in sockAddr;
-   struct icmphdr *icmpHdr;
-   struct iphdr *ipHdr;
+void PrintPacket(char *pkt, int pktSize, int showVals) {
+   int idx;
+   struct iphdr ip;
+   struct icmphdr icmp;
+   struct in_addr src, dst;
 
-   if (((*sockFD) = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == -1)
-      perror("Socket");
-   debug("socketFD: %d\n", *sockFD);
+   printf("-------------\n" );
+   if (showVals) {
+      ip = *(struct iphdr *) pkt;
+      icmp = *(struct icmphdr *) (&ip + sizeof(struct iphdr));
+      printf("Packet with ID %hd, and ICMP.ID %hd\n", ip.id, icmp.un.echo.id);
+      printf("\ticmp.id : %d\n", icmp.un.echo.id);
+      printf("\ticmp.seq : %d\n", icmp.un.echo.sequence);
+      printf("\tihl : %d\n", ip.ihl);
+      printf("\ttot_len :  %d\n", ip.tot_len);
+      src.s_addr = ip.saddr;
+      dst.s_addr = ip.daddr;
+      printf("\tsaddr : %s\n", inet_ntoa(src));
+      printf("\tdaddr : %s\n", inet_ntoa(dst));
 
-   /* Use MY ip_header, not the kernal's default */
-   setsockopt(*sockFD, IPPROTO_IP, IP_HDRINCL, &sockOpt, sizeof(int));
+   }
+   else {
 
-   sockAddr.sin_family = AF_INET; 
-   sockAddr.sin_addr.s_addr = inet_addr(dst);
+      for (idx = 0; idx < pktSize; idx++)
+         printf("%c ", pkt[idx]);
+      printf("\n");
+   }
+   printf("===========\n" );
 
-   pktSize = sizeof(struct iphdr) + sizeof(struct icmphdr);  
-   pkt = calloc(1, sizeof(struct iphdr) + sizeof(struct icmphdr));
-
-   ipHdr = (struct iphdr *) pkt; 
-   icmpHdr = (struct icmphdr *) (pkt + sizeof(struct icmphdr));  
-
+   /* 
    ipHdr->ihl = 5;
    ipHdr->version = 4;
    ipHdr->tot_len = pktSize;
@@ -253,31 +161,187 @@ void PingHost(char *dst, int interval, int *sockFD) {
    icmpHdr->type = ICMP_ECHO;
    icmpHdr->un.echo.sequence = htons(pktNum++);
    icmpHdr->un.echo.id = htons(pid = getpid());
+   */
 
-   debug("pktSize: %d\n", pktSize);
-   debug("pid: %d\n", pid);
-   debug("icmp ID: %d\n", ntohs(icmpHdr->un.echo.id));
-   debug("packet num: %d\n", icmpHdr->un.echo.sequence);
-   debug("ipPacket->totLen : %d\n", ipHdr->tot_len);
+}
 
-   printf("Sending a %d byte packet to %s, through sockedFD %d\n", ipHdr->tot_len ,dst, *sockFD);
+/*
+int SendPacket(int sockFD, struct sockaddr_in sockAddress, struct iphdr *packet, char *dst) {
 
-   if (sendto(*sockFD, pkt, ipHdr->tot_len, 0, (struct sockaddr*) &sockAddr, 
-    (socklen_t) sizeof(struct sockaddr_in)));
-    perror("sendto");
-    //sizeof(sockAddr)) == -1)
-    //(socklen_t *) &addressLength) == -1)
-//
-    //  sizeof(struct sockaddr_in);
-    //(socklen_t *) &addressLength) == -1)
+   //struct iphdr *ipPacket;
+
+   //ipPacket = (struct iphdr *) packet;
+
+   debug("ipPacket->totLen : %d\n", packet->tot_len);
+
+   if (sendto(sockFD, packet, packet->tot_len, 0, 
+    (struct sockaddr *) &sockAddress, sizeof(struct sockaddr)) == -1)
+      perror("sendto");
 
    //gettimeofday(sendTime, NULL);
 
+   debug("Sent %d byte packet to %s\n", packet->tot_len, dst);
+
+   return 1;
+}
+*/
+
+void ReadPacket(int sockFD, char *dst) {
+
+   typedef struct tagIPHDR
+   {
+      u_char VIHL; // Ver, Hdr length
+      u_char TOS; // Type of service
+      short TotLen; // Total length
+      short ID; // Identification
+      short FlagOff; // Flags, Frag off
+      u_char TTL; // Time-to-live
+      u_char Protocol; // Protocol
+      u_short Checksum; // Checksum
+      struct in_addr iaSrc; // Source IP addr
+      struct in_addr iaDst; // Dest IP addr
+   } IPHDR, *PIPHDR;
+
+   struct iphdr *replyPacket;
+   struct icmphdr *replyIcmpHeader;
+   struct sockaddr_in recSock;
+   IPHDR fuck;
+   int addrLen, bufSize, sockOpt;
+   char *buf;//, *packetSrcAddr;
+
+   recSock.sin_family = AF_INET;
+   recSock.sin_addr.s_addr = inet_addr(dst);
+
+   setsockopt(sockFD, IPPROTO_IP, IP_HDRINCL, &sockOpt, sizeof(int));
+
+   addrLen = sizeof(recSock);
+   bufSize = sizeof(struct iphdr) + sizeof(struct icmphdr);
+   buf = calloc(1, bufSize);
+   debug("r\tAddress Length: %d\n", addrLen);
+
+   //fprintf(stderr, "Reading from socked: %d\n", sockFD);
+   printf("r\tReading a packet into a %d byte buffer through sockedFD %d\n", bufSize ,  sockFD);
+   //if ((sockFD = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == -1 )
+   //   perror("Read create socket");
+
+   recvfrom(sockFD, &fuck, sizeof(fuck), 0, (struct sockaddr *) &recSock, 
+    (socklen_t *) &addrLen);
+   perror("r\trecvfrom");
+
+   PrintPacket(buf, bufSize, 1);
+
+   fprintf(stderr, "r\tdone\n" );
+   //socklen_t *addrlen
+   //gettimeofday(recTime, NULL);
+
+   replyPacket = (struct iphdr *) buf;
+   
+   /*
+   printf("internal pnum: %d\n", 
+   (
+    (struct icmphdr *) (replyPacket + sizeof(struct icmphdr))
+   )->un.echo.sequence
+   );
+   //replyIcmpHeader = (struct icmphdr *) (*packet + sizeof(struct icmphdr));
+   printf("replyIcmpHeader seq: %d\n", replyIcmpHeader->un.echo.sequence);
+   */ 
+   replyIcmpHeader = (struct icmphdr *) (replyPacket + sizeof(struct iphdr));
+   //packetSrcAddr = (char *)&replyPacket->saddr;
+
+   /*  printf("Received %d bytes from %u.%u.%u.%u:\n", 
+   ntohs(replyPacket->tot_len), 
+   packetSrcAddr[0] & 0xff, 
+   packetSrcAddr[1] & 0xff, 
+   packetSrcAddr[2] & 0xff,
+   packetSrcAddr[3] & 0xff);
+   */
+   //timersub(recTime, sendTime, &timeDiff);
+   
+   /* 
+   struct in_addr srcAddr, dstAddr;
+   srcAddr.s_addr = replyPacket->saddr;
+   dstAddr.s_addr = replyPacket->daddr;
+
+   printf("%d bytes from %s (%s): icmp_seq=%d ttl=%d time=%2.1lf ms\n", 
+         ntohs(replyPacket->tot_len),
+         inet_ntoa(srcAddr),
+         inet_ntoa(dstAddr),
+         //char *inet_ntoa(struct in_addr in);
+         replyIcmpHeader->un.echo.sequence, 
+         replyPacket->ttl, 
+         (double) timeDiff.tv_usec / 100);
+
+   printf("Took %2.1lf\n", (double) timeDiff->tv_usec / 100 ); 
+   printf("Took %ld.%.6ld\n", (long int) timeDiff.tv_sec, (long int) timeDiff.tv_usec); 
+   printf("TTL: %d\n", ip_reply->ttl);
+   */
+
+}
+
+void PingHost(char *dst, int interval, int *sockFD) {
+   int sockOpt, pktSize, pktNum = 1, pid;
+   char *pkt, *srcIPAddress = "192.168.1.222";
+   struct sockaddr_in sockAddr;
+   struct icmphdr icmpHdr;
+   struct iphdr ipHdr;
+
+   if (((*sockFD) = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == -1)
+      perror("Socket");
+   debug("socketFD: %d\n", *sockFD);
+
+   /* Use MY ip_header, not the kernal's default */
+
+   sockAddr.sin_family = AF_INET; 
+   sockAddr.sin_addr.s_addr = inet_addr(dst);
+
+   setsockopt(*sockFD, IPPROTO_IP, IP_HDRINCL, &sockOpt, sizeof(int));
+
+   pktSize = sizeof(struct iphdr) + sizeof(struct icmphdr);  
+   pkt = calloc(1, sizeof(struct iphdr) + sizeof(struct icmphdr));
+
+   //ipHdr = (struct iphdr *) pkt; 
+   //icmpHdr = (struct icmphdr *) (pkt + sizeof(struct iphdr));  
+
+   ipHdr.ihl = 5;
+   ipHdr.version = 4;
+   ipHdr.tot_len = pktSize;
+   ipHdr.protocol = IPPROTO_ICMP;
+   ipHdr.saddr = inet_addr(srcIPAddress);
+   ipHdr.daddr = inet_addr(dst);
+   icmpHdr.type = ICMP_ECHO;
+   icmpHdr.un.echo.sequence = pktNum++;
+   ipHdr.id = 69;
+   icmpHdr.un.echo.id = 69;
+
+   memcpy(pkt, &ipHdr, sizeof(ipHdr));
+   memcpy(pkt + sizeof(ipHdr), &icmpHdr, sizeof(icmpHdr));
+
+   printf("pid: %d\n", pid);
+   printf("icmp ID: %d\n", icmpHdr.un.echo.id);
+   printf("packet num: %d\n", icmpHdr.un.echo.sequence);
+   printf("ipPacket.totLen : %d\n", ipHdr.tot_len);
+
+   printf("Sending a %d byte packet to %s, through sockedFD %d\n", ipHdr.tot_len ,dst, *sockFD);
+
+   PrintPacket(pkt, ipHdr.tot_len, 1);
+
+   if (sendto(*sockFD, pkt, ipHdr.tot_len, 0, (struct sockaddr*) &sockAddr, 
+    (socklen_t) sizeof(struct sockaddr_in)));
+    perror("sendto");
+   /* 
+   sizeof(sockAddr)) == -1)
+   (socklen_t *) &addressLength) == -1)
+   sizeof(struct sockaddr_in);
+   (socklen_t *) &addressLength) == -1)
+   gettimeofday(sendTime, NULL);
+   */
    debug("Sent %d byte packet to %s\n", ((struct iphdr *) pkt)->tot_len, dst);
-   //icmp->checksum
-   //(*packet)->ttl = 225;
-   //ipHeader->check = PacketChecksum();
-   //pexit("Could not connect to host");
+   /*
+   icmp->checksum
+   (*packet)->ttl = 225;
+   ipHeader->check = PacketChecksum();
+   pexit("Could not connect to host");
+   */
 }
 
 int main(int argc, char *argv[]) {
@@ -296,9 +360,9 @@ int main(int argc, char *argv[]) {
    //   pexit("Could not connect to host");
    
 
-//   if (0) {//!fork()) {
- //     //receiver
-  // }
+   //   if (0) {//!fork()) {
+   //     //receiver
+   // }
    //else {
       PingHost(dstIP, interval, &sockFD);
       ReadPacket(sockFD, dstIP);
